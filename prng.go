@@ -24,7 +24,13 @@ func (s *Source) Int63() int64 {
 	s.State ^= s.State >> 12 // a
 	s.State ^= s.State << 25 // b
 	s.State ^= s.State >> 27 // c
-	return s.State * 2685821657736338717
+	r := s.State * 2685821657736338717
+
+	// get absolute value
+	temp := r >> 64
+	r ^= temp
+	r += temp & 1
+	return r
 }
 
 // NewSource returns a new pseudo-random Source seeded with the given value.
